@@ -3,6 +3,10 @@ import { AgGridReact } from "ag-grid-react";
 import * as agGrid from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import '@fontsource/roboto/400.css'; // Regular weight
+import '@fontsource/roboto/500.css'; // Medium weight
+import '@fontsource/roboto/700.css'; // Bold weight
+
 
 interface RowData {
   athlete: string;
@@ -31,22 +35,35 @@ const Grid: React.FC = () => {
   }, []);
 
   const columnDefs: agGrid.ColDef[] = [
-    { field: "athlete", filter: "agTextColumnFilter" },
-    { field: "age", filter: "agNumberColumnFilter" },
-    { field: "country", filter: "agSetColumnFilter" },
-    { field: "year", filter: "agNumberColumnFilter" },
-    { field: "date", filter: "agDateColumnFilter" },
-    { field: "sport", filter: "agTextColumnFilter" },
-    { field: "gold", filter: "agNumberColumnFilter" },
-    { field: "silver", filter: "agNumberColumnFilter" },
-    { field: "bronze", filter: "agNumberColumnFilter" },
-    { field: "total", filter: "agNumberColumnFilter" },
+    { field: "athlete", filter: "agTextColumnFilter", sortable: true },
+    { field: "age", filter: "agNumberColumnFilter", sortable: true },
+    { field: "country", filter: "agSetColumnFilter", sortable: true },
+    { field: "year", filter: "agNumberColumnFilter", sortable: true },
+    { field: "date", filter: "agDateColumnFilter", sortable: true },
+    { field: "sport", filter: "agTextColumnFilter", sortable: true },
+    { field: "gold", filter: "agNumberColumnFilter", sortable: true },
+    { field: "silver", filter: "agNumberColumnFilter", sortable: true },
+    { field: "bronze", filter: "agNumberColumnFilter", sortable: true },
+    { field: "total", filter: "agNumberColumnFilter", sortable: true },
+    {
+      headerName: '',
+      field: 'actions',
+      width: 50,
+      cellRenderer: () => (
+        <button className="px-2 py-1 text-gray-600 hover:text-gray-900">
+          ⋮
+        </button>
+      )
+    }
   ];
 
   const defaultColDef: agGrid.ColDef = {
     flex: 1,
     minWidth: 100,
     resizable: true,
+    filter: true,
+    floatingFilter: true,
+    sortable: true,
   };
 
   const onGridReady = (params: agGrid.GridReadyEvent) => {
@@ -64,15 +81,29 @@ const Grid: React.FC = () => {
     }
   };
 
+  const exportToExcel = () => {
+    if (gridApi) {
+      gridApi.exportDataAsCsv();
+    }
+  };
+
   return (
     <div className="ag-theme-alpine grid-container">
       <div className="flex justify-between align-middle mb-4 text-lg text-[#4b5563] ">
-        <button
-          className="rounded bg-gray-200 px-3 py-1"
-          onClick={clearFilters}
-        >
-          Clear Filters
-        </button>
+        <div>
+          <button
+            className="rounded bg-gray-200 px-3 py-1 mr-2"
+            onClick={clearFilters}
+          >
+            Clear Filters
+          </button>
+          <button
+            className="rounded bg-gray-200 px-3 py-1"
+            onClick={exportToExcel}
+          >
+            Export to CSV
+          </button>
+        </div>
       </div>
       <AgGridReact
         className="ag-grid"
@@ -83,22 +114,31 @@ const Grid: React.FC = () => {
         pagination={true}
         paginationPageSize={50}
         onPaginationChanged={onPaginationChanged}
+        enableRangeSelection={true}
+        rowSelection="multiple"
+        animateRows={true}
+        suppressRowClickSelection={true}
+        groupSelectsChildren={true}
+        rowMultiSelectWithClick={true}
       ></AgGridReact>
       <style jsx global>{`
         .grid-container {
           height: 800px;
           width: 100%;
         }
+        .ag-grid {
+          font-family: 'Roboto', sans-serif;
+        }
         .ag-grid .ag-cell {
           padding: 0.5rem;
-          font-size: 1.2rem;
+          font-size: 1.0rem;
           color: #4b5563;
           border-color: #e5e7eb;
           line-height: 1.5;
         }
         .ag-grid .ag-header-cell {
-          font-weight: 600;
-          font-size: 1.2rem;
+          font-weight: 400;
+          font-size: 1.1rem;
           color: #374151;
           background-color: #f9fafb;
           border-color: #e5e7eb;
