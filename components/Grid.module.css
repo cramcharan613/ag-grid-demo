@@ -1,0 +1,12 @@
+.gridContainer {
+  height: 800px;
+  width: 100%;
+}
+.summary {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.agGrid {
+  font-family: 'Roboto', sans-serif;
+}

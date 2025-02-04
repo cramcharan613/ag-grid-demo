@@ -1,10 +1,7 @@
-import '@fontsource/roboto/400.css'; // Regular weight
-import '@fontsource/roboto/500.css'; // Medium weight
-import '@fontsource/roboto/700.css'; // Bold weight
-
 import { useState } from "react";
 import Link from "next/link";
 import Grid from "../components/Grid";
+import { HiMenu, HiX } from "react-icons/hi";
 
 const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -14,7 +11,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <div
         className={`bg-gray-800 text-white w-64 space-y-6 py-7 px-2 transition-all duration-300 ${
@@ -34,20 +31,26 @@ const Home = () => {
 
       {/* Main Content */}
       <div className="flex-1 p-10">
-        {/* Toggle Button */}
-        <button
-          onClick={toggleSidebar}
-          className="mb-5 p-2 bg-gray-800 text-white rounded-md"
-        >
-          {isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-        </button>
+        <div className="max-w-[1200px] mx-auto">
+          {/* Toggle Button */}
+          <button
+            onClick={toggleSidebar}
+            className="mb-5 p-2 bg-gray-800 text-white rounded-md flex items-center gap-2"
+          >
+            {isSidebarOpen ? (
+              <>
+                <HiX className="w-5 h-5" />
+              </>
+            ) : (
+              <>
+                <HiMenu className="w-5 h-5" />
+              </>
+            )}
+          </button>
 
-        <div className="mb-5 font-semibold text-blue-700 hover:text-blue-400">
-          <a target="_blank" href="https://github.com/owolfdev/ag-grid-demo">
-            Github Repo
-          </a>
+
+          <Grid />
         </div>
-        <Grid />
       </div>
     </div>
   );
